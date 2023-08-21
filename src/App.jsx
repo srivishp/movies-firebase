@@ -5,9 +5,11 @@ import "./App.css";
 
 function App() {
   const [movies, setMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // async-await
   async function fetchMoviesHandler() {
+    setIsLoading(true);
     // Fetch API is available in the browser
     // GET request by default
     // API requests are async, hence Promises exist in JS
@@ -23,6 +25,7 @@ function App() {
       };
     });
     setMovies(transformedMovies);
+    setIsLoading(false);
   }
 
   return (
@@ -31,7 +34,9 @@ function App() {
         <button onClick={fetchMoviesHandler}>Fetch Movies</button>
       </section>
       <section>
-        <MoviesList movies={movies} />
+        {!isLoading && movies.length > 0 && <MoviesList movies={movies} />}
+        {isLoading && <p>Loading...</p>}
+        {!isLoading && movies.length === 0 && <p>No movies found.</p>}
       </section>
     </React.Fragment>
   );
