@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-
+import AddMovie from "./components/AddMovie";
 import MoviesList from "./components/MoviesList";
 import "./App.css";
 
@@ -16,6 +16,7 @@ function App() {
     // GET request by default
     // API requests are async, hence Promises exist in JS
     try {
+      //SWAPI - Star Wars API
       const response = await fetch("https://swapi.dev/api/films");
 
       if (!response.ok) {
@@ -44,6 +45,10 @@ function App() {
     fetchMoviesHandler();
   }, [fetchMoviesHandler]);
 
+  function addMovieHandler(movie) {
+    console.log(movie);
+  }
+
   let content = <p>No movies found.</p>;
 
   if (!isLoading && movies.length > 0) {
@@ -60,6 +65,9 @@ function App() {
 
   return (
     <React.Fragment>
+      <section>
+        <AddMovie onAddMovie={addMovieHandler} />
+      </section>
       <section>
         <button onClick={fetchMoviesHandler}>Fetch Movies</button>
       </section>
