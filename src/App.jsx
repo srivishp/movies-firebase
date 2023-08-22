@@ -16,23 +16,36 @@ function App() {
     // GET request by default
     // API requests are async, hence Promises exist in JS
     try {
-      //SWAPI - Star Wars API
-      const response = await fetch("https://swapi.dev/api/films");
+      //Firebase Real time DB URL
+      const response = await fetch(
+        "https://react-movies-http-81c08-default-rtdb.asia-southeast1.firebasedatabase.app/movies.json"
+      );
 
       if (!response.ok) {
         throw new Error("Something went wrong!");
       }
       const data = await response.json();
+      const loadedMovies = [];
 
-      const transformedMovies = data.results.map((movieData) => {
-        return {
-          id: movieData.episode_id,
-          title: movieData.title,
-          openingText: movieData.opening_crawl,
-          releaseDate: movieData.release_date,
-        };
-      });
-      setMovies(transformedMovies);
+      for (const key in data) {
+        loadedMovies.push({
+          id: key,
+          title: data[key].title,
+          openingText: data[key].openingText,
+          releaseDate: data[key].releaseDate,
+        });
+      }
+      console.log(loadedMovies);
+
+      // const transformedMovies = data.results.map((movieData) => {
+      //   return {
+      //     id: movieData.episode_id,
+      //     title: movieData.title,
+      //     openingText: movieData.opening_crawl,
+      //     releaseDate: movieData.release_date,
+      //   };
+      // });
+      setMovies(loadedMovies);
       setIsLoading(false);
     } catch (error) {
       setError(error.message);
@@ -45,8 +58,18 @@ function App() {
     fetchMoviesHandler();
   }, [fetchMoviesHandler]);
 
-  function addMovieHandler(movie) {
-    console.log(movie);
+  // Sending POST request, all API requests are async-await
+  async function addMovieHandler(movie) {
+    const response = await fetch(
+      "https://react-movies-http-81c08-default-rtdb.asia-southeast1.firebasedatabase.app/movies.json",
+      {
+        method: "POST",
+        body: JSON.stringify(movie),
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    const data = await response.json();
+    console.log(data);
   }
 
   let content = <p>No movies found.</p>;
