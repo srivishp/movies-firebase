@@ -60,16 +60,23 @@ function App() {
 
   // Sending POST request, all API requests are async-await
   async function addMovieHandler(movie) {
-    const response = await fetch(
-      "https://react-movies-http-81c08-default-rtdb.asia-southeast1.firebasedatabase.app/movies.json",
-      {
-        method: "POST",
-        body: JSON.stringify(movie),
-        headers: { "Content-Type": "application/json" },
+    try {
+      const response = await fetch(
+        "https://react-movies-http-81c08-default-rtdb.asia-southeast1.firebasedatabase.app/movies.json",
+        {
+          method: "POST",
+          body: JSON.stringify(movie),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Something went wrong!");
       }
-    );
-    const data = await response.json();
-    console.log(data);
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      setError(error.message);
+    }
   }
 
   let content = <p>No movies found.</p>;

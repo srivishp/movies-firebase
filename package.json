@@ -1,5 +1,5 @@
 {
-  "name": "star-wars-movies",
+  "name": "movies-firebase",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
